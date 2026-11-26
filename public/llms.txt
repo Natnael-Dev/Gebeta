@@ -1,0 +1,15 @@
+# Gebeta
+
+> Good food, moving fast — Addis Ababa's curated kitchen and food delivery experience across Bole, Kazanchis, Piassa, and beyond.
+
+## Overview
+Gebeta is an editorial food delivery web and native Android application built with React, Vite, and Capacitor. It supports multilingual experiences (English, Amharic, Oromo, Tigrinya, French, and Arabic with RTL support), Ethiopian Birr (Br) pricing, live order tracking, customizable dishes, saved favorites, and Gebeta Club membership perks.
+
+## Key Views & Flows
+- `/` — Entry experience: Splash, Welcome, Onboarding, Authentication, Location permission, and Discovery Home
+- Home — Personalized greeting, delivery address selector, cuisine filters, The Gursha Edit & The Heat Edit curated collections, popular nearby kitchens, and fast delivery picks
+- Explore — Real-time search across dishes and kitchens with sort, price tier, and free-delivery filters
+- Kitchen & Dish Detail — Menu browsing, spice/portion customization, kitchen notes, and bag additions
+- Bag & Checkout — Delivery address map & picker, Standard/Priority/Scheduled windows, CBE Birr / Telebirr / Visa / Mastercard / Cash payment methods, promo codes (`BITE20`), and Ethiopian VAT summary
+- Orders & Live Tracking — Real-time order stage timeline, interactive route map, courier contact/chat, and post-delivery rating & review
+- Saved, Profile & Support — Saved kitchens & dishes, Gebeta Club card, address book, wallet management, language preferences, FAQ, and live support chat
