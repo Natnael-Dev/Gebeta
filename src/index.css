@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+@import './styles/shell.css';
+@import './styles/screens.css';
+@import './styles/motion.css';
