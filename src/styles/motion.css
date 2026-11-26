@@ -1,0 +1,463 @@
+/* ── Snappy GPU-Composited Motion, Rolling Digits & Reduced Motion ── */
+.img-fade {
+  opacity: 1;
+  transition: transform 0.6s var(--ease);
+}
+.img-fade.loaded {
+  opacity: 1;
+}
+
+.rise {
+  animation: rise 0.22s var(--ease) backwards;
+}
+.rise + .rise {
+  animation-delay: 45ms;
+}
+
+.stagger > * {
+  animation: rise 0.16s var(--ease);
+}
+
+/* ── Rolling digit drum (exact em offset, no rounding drift) ── */
+.rolling {
+  display: inline-flex;
+  direction: ltr;
+  unicode-bidi: isolate;
+  height: 1.3em;
+  line-height: 1.3em;
+  vertical-align: bottom;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.roll,
+.roll-char {
+  display: inline-block;
+  height: 1.3em;
+  line-height: 1.3em;
+  overflow: hidden;
+}
+.roll-strip {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.36s var(--roll-ease);
+}
+.roll-strip span {
+  height: 1.3em;
+  line-height: 1.3em;
+  display: grid;
+  place-items: center;
+  flex: 0 0 1.3em;
+  text-align: center;
+}
+.roll-char {
+  white-space: pre;
+}
+
+/* ── Text reveal (GPU-only opacity + transform, readable from frame 0) ── */
+.blur-word {
+  display: inline-block;
+  animation: blurIn 0.16s var(--ease) backwards;
+}
+@keyframes blurIn {
+  from {
+    opacity: 0.35;
+    transform: translateY(3px);
+  }
+}
+
+/* ── Press-and-hold destructive button ── */
+.hold {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 52px;
+  min-height: 52px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(201, 42, 14, 0.1);
+  color: var(--tomato-ink);
+  font-size: 14px;
+  font-weight: 600;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: transform 0.22s var(--spring);
+}
+.hold:active {
+  transform: scale(0.98);
+}
+.hold-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--tomato-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s var(--ease);
+}
+[dir='rtl'] .hold-fill {
+  transform-origin: right;
+}
+.holding .hold-fill {
+  transform: scaleX(1);
+  transition: transform var(--hold) linear;
+}
+.hold-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+.holding .hold-label {
+  color: #fff;
+}
+
+/* ── Infinite marquee ticker ── */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-inline: calc(var(--screen-px) * -1);
+  padding: 13px 0;
+  border-block: 1px solid var(--hair);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.mq-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 36s linear infinite;
+}
+.marquee:hover .mq-track,
+.marquee:active .mq-track,
+.marquee.paused .mq-track {
+  animation-play-state: paused;
+}
+.mq-row {
+  display: flex;
+}
+.mq-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline-end: 18px;
+  font: 600 10px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.mq-item b {
+  font:
+    700 18px 'Noto Sans Ethiopic',
+    var(--display);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+.mq-item svg {
+  margin-inline-start: 10px;
+  color: var(--tomato);
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+[dir='rtl'] .mq-track {
+  animation-name: marqueeRtl;
+}
+@keyframes marqueeRtl {
+  to {
+    transform: translateX(50%);
+  }
+}
+
+/* ── Like button burst ── */
+.burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.burst i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px;
+  border-radius: 50%;
+  background: var(--tomato);
+  animation: burst 0.55s var(--ease) forwards;
+}
+.burst i:nth-child(even) {
+  background: var(--gold);
+  width: 4px;
+  height: 4px;
+}
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--a)) translateY(-4px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(-24px) scale(0.3);
+  }
+}
+
+/* ── View transitions ── */
+::view-transition-old(root) {
+  animation: vtOut 0.2s var(--ease) both;
+}
+::view-transition-new(root) {
+  animation: vtIn 0.24s var(--ease) both;
+}
+::view-transition-group(hero),
+::view-transition-group(dish) {
+  animation-duration: 0.36s;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+::view-transition-old(hero),
+::view-transition-new(hero),
+::view-transition-old(dish),
+::view-transition-new(dish) {
+  height: 100%;
+  object-fit: cover;
+  overflow: clip;
+}
+
+/* ── Keyframes ── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes barIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes badgeIn {
+  0% {
+    transform: translate(9px, -9px) scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-1px, 1px) scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes heartPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes tabBounce {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.15) translateY(-1px);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes tickIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+@keyframes halo {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 227;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes shake {
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.92);
+  }
+}
+@keyframes toastOut {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -14px) scale(0.95);
+  }
+}
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(6px);
+  }
+}
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+@keyframes radar {
+  from {
+    transform: scale(0.35);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+@keyframes float {
+  to {
+    transform: translate(30px, 40px) scale(1.1);
+  }
+}
+@keyframes markIn {
+  0% {
+    transform: scale(0.55) rotate(-14deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(-4deg);
+    opacity: 1;
+  }
+}
+@keyframes obIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94) rotate(0);
+  }
+}
+@keyframes fillBar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes vtOut {
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+@keyframes vtIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .club {
+    transform: none !important;
+  }
+  .mq-track {
+    animation: none !important;
+  }
+  .splash-orb {
+    animation: none !important;
+  }
+}
