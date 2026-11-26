@@ -1,0 +1,33 @@
+# Dependencies & build outputs
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+.vite/
+vite.config.*.timestamp-*
+*.tsbuildinfo
+
+# Environment & secrets
+.env*
+
+# Logs & temporary files
+*-debug.log*
+logs/
+*.log
+.tmp-*
+
+# OS & editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Android native build & signing artifacts
+android/.gradle/
+android/app/build/
+android/build/
+android/capacitor-cordova-android-plugins/build/
+*.apk
+*.aab
+*.jks
+*.keystore
